@@ -61,16 +61,26 @@ namespace Examen_Filosfos_kg
 
         }
 
+        private double DisplayRand(int num)
+        {
+            double result = (double)num/1000;
+            return Math.Round(result,2);
+        }
+
         private void Pensando(int id)
         {
             //cada filosofo repite el proceso 5 veces
             for (int i = 0;i < 5;i++)
             {
+                //tiempo que estara en espera *
+                int waitingTime = rand.Next(1000, 3000);
+                
+
                 //se cambia el estado a en espera
-                UpdateEstado(id, i, "En Espera", Color.LemonChiffon);
-                //se espera un tiempo aleatorio
-                var RandTime = rand.Next(1000, 3000);
-                Thread.Sleep(RandTime);
+                UpdateEstado(id, i, $"En Espera +{DisplayRand(waitingTime)}s", Color.LemonChiffon);
+
+
+                Thread.Sleep(waitingTime);
                 //Thread.Sleep(10);
                 //se bloquean los palillos derecho e izquierdo
                 //lock evita que dos filosofos tomen el mismo palillo al mismo tiempo
@@ -78,11 +88,12 @@ namespace Examen_Filosfos_kg
                 {
                     lock(palillos[(id+1) % 5])
                     {
+                        //tiempo que va a durar comiendo *
+                        var eatingTime = rand.Next(1000, 3000);
                         //si toma los palillos el estado se cambia
-                        UpdateEstado(id, i, $"Comiendo {RandTime}", Color.LightSkyBlue);
+                        UpdateEstado(id, i, $"Comiendo +{DisplayRand(eatingTime)}s", Color.LightSkyBlue);
                         //se espera un tiempo
-                        //var RandTime2 = rand.Next(1000, 3000);
-                        Thread.Sleep(rand.Next(1000, 3000));
+                        Thread.Sleep(eatingTime);
                         //Thread.Sleep(10);
                         comidas[id]++;
                     }
